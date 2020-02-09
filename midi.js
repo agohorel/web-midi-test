@@ -1,4 +1,11 @@
 import { definitions } from "./midiDefinitions.js";
+import Slider from "./uiComponents.js";
+
+let faders = [];
+for (let i = 0; i < 100; i++) {
+  faders.push(new Slider({ parent: "body", name: "volume", index: i }));
+  faders[i].create();
+}
 
 const potDisplay = document.querySelector(".pot");
 const btnDisplay = document.querySelector(".button");
@@ -22,6 +29,7 @@ function onMIDISuccess(midiAccess) {
 
   for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
     input.value.onmidimessage = onMIDIMessage;
+    console.log(input);
   }
 
   // listen for connect/disconnect msg
@@ -45,9 +53,12 @@ function onMIDIMessage(event) {
     case definitions.noteOn:
     case definitions.noteOff:
       btnDisplay.textContent = `button value: ${velocity}`;
+      faders.forEach(fader => fader.delete());
+      faders = null;
       break;
     case definitions.cc:
       potDisplay.textContent = `potentiometer value: ${velocity}`;
+      faders.forEach(fader => fader.update(velocity));
       break;
     default:
       null;
