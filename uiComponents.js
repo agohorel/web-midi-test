@@ -13,6 +13,7 @@ class Slider {
   create = () => {
     this.component = document.createElement("div");
     this.component.id = `${this.type}_${this.name}_${this.index}`;
+    this.component.classList.add(this.type);
 
     this.label = document.createElement("label");
     this.label.textContent = `${this.type}_${this.name}_${this.index}`;
@@ -31,6 +32,10 @@ class Slider {
 
   update = cc => {
     this.input.value = cc;
+    document.documentElement.style.setProperty(
+      "--fader-background",
+      `rgb(${cc}, ${cc}, ${cc})`
+    );
   };
 
   delete = () => {
