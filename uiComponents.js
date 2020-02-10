@@ -61,12 +61,12 @@ class Knob extends Control {
     this.viewbox = null;
     this.knobBackground = null;
     this.knobValue = this.initialValue;
+    this.dragActive = false;
   }
 
   create = () => {
     this.component = document.createElement("div");
     this.component.id = `${this.type}_${this.name}_${this.index}`;
-    this.component.classList.add(this.type);
 
     this.label = document.createElement("label");
     this.label.textContent = `${this.type}_${this.name}_${this.index}`;
@@ -83,6 +83,22 @@ class Knob extends Control {
       "svg"
     );
     this.viewbox.setAttribute("viewBox", "0 0 60 60");
+    this.viewbox.addEventListener("mousedown", () => {
+      this.dragActive = true;
+    });
+    this.viewbox.addEventListener("mouseup", () => {
+      this.dragActive = false;
+    });
+    this.viewbox.addEventListener("mousemove", e => {
+      if (this.dragActive) {
+        this.knobValue = this.map(e.clientY, 294, 210, 0, 170);
+        // going to need a better approach - I think this will always change them all
+        document.documentElement.style.setProperty(
+          "--knob-value",
+          `${this.knobValue}`
+        );
+      }
+    });
 
     this.knobBackground = document.createElementNS(
       "http://www.w3.org/2000/svg",
