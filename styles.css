@@ -10,7 +10,7 @@
 }
 
 * {
-  margin: 0;
+  margin: 10px;
   padding: 0;
   box-sizing: border-box;
 }
@@ -67,4 +67,23 @@ label {
   display: flex;
   flex-direction: column;
   height: var(--fader-length);
+}
+
+.button {
+  border: none;
+  background-color: var(--aleph-darkgrey);
+  padding: 10px 15px;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: #4c4c4c;
+}
+
+.add {
+  color: var(--aleph-green);
+}
+
+.remove {
+  color: var(--aleph-blue);
 }
