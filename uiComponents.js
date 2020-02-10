@@ -13,6 +13,10 @@ class Control {
     const elem = document.querySelector(`#${this.component.id}`);
     elem.parentNode.removeChild(elem);
   };
+
+  map = (value, inMin, inMax, outMin, outMax) => {
+    return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+  };
 }
 
 class Fader extends Control {
@@ -110,7 +114,10 @@ class Knob extends Control {
 
   update = cc => {
     this.input.value = cc;
-    document.documentElement.style.setProperty("--fader-value", `${cc}`);
+    document.documentElement.style.setProperty(
+      "--fader-value",
+      `${this.map(cc, 0, 127, 0, 170)}`
+    );
   };
 }
 
