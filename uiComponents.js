@@ -9,6 +9,18 @@ class Control {
     this.component = null;
   }
 
+  delete = () => {
+    const elem = document.querySelector(`#${this.component.id}`);
+    elem.parentNode.removeChild(elem);
+  };
+}
+
+class Fader extends Control {
+  constructor(props) {
+    super(props);
+    this.type = "fader";
+  }
+
   create = () => {
     this.component = document.createElement("div");
     this.component.id = `${this.type}_${this.name}_${this.index}`;
@@ -28,18 +40,6 @@ class Control {
 
     document.querySelector(this.parent).appendChild(this.component);
   };
-
-  delete = () => {
-    const elem = document.querySelector(`#${this.component.id}`);
-    elem.parentNode.removeChild(elem);
-  };
-}
-
-class Fader extends Control {
-  constructor(props) {
-    super(props);
-    this.type = "fader";
-  }
 
   update = cc => {
     this.input.value = cc;

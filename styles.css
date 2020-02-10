@@ -7,6 +7,7 @@
   --input-height: 20px;
   --fader-length: 200px;
   --fader-background: rgb(46, 50, 51);
+  --fader-value: 85;
 }
 
 * {
@@ -86,4 +87,27 @@ label {
 
 .remove {
   color: var(--aleph-blue);
+}
+
+.knob {
+  max-width: 100px;
+}
+
+.knob-input {
+  display: none;
+}
+
+.knob-background {
+  stroke-width: 6;
+  fill: none;
+  transform-origin: center;
+}
+
+.knob-value {
+  stroke-width: 6;
+  stroke: var(--aleph-green);
+  stroke-dasharray: var(--fader-value), 99999;
+  transform: rotate(90deg);
+  fill: none;
+  transform-origin: center;
 }
