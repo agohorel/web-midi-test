@@ -1,9 +1,9 @@
 import { definitions } from "./midiDefinitions.js";
-import Slider from "./uiComponents.js";
+import Fader from "./uiComponents.js";
 
 let faders = [];
 for (let i = 0; i < 100; i++) {
-  faders.push(new Slider({ parent: ".sliders", name: "volume", index: i }));
+  faders.push(new Fader({ parent: ".faders", name: "volume", index: i }));
   faders[i].create();
 }
 

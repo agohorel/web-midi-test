@@ -58,12 +58,12 @@ label {
   margin-bottom: 20px;
 }
 
-.sliders {
+.faders {
   display: flex;
   flex-wrap: wrap;
 }
 
-.slider {
+.fader {
   display: flex;
   flex-direction: column;
   height: var(--fader-length);

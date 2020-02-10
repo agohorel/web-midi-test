@@ -1,6 +1,5 @@
-class Slider {
+class Control {
   constructor(props) {
-    this.type = "slider";
     this.parent = props.parent;
     this.name = props.name;
     this.index = props.index;
@@ -30,6 +29,18 @@ class Slider {
     document.querySelector(this.parent).appendChild(this.component);
   };
 
+  delete = () => {
+    const elem = document.querySelector(`#${this.component.id}`);
+    elem.parentNode.removeChild(elem);
+  };
+}
+
+class Fader extends Control {
+  constructor(props) {
+    super(props);
+    this.type = "fader";
+  }
+
   update = cc => {
     this.input.value = cc;
     document.documentElement.style.setProperty(
@@ -37,11 +48,13 @@ class Slider {
       `rgb(${cc}, ${cc}, ${cc})`
     );
   };
-
-  delete = () => {
-    const elem = document.querySelector(`#${this.component.id}`);
-    elem.parentNode.removeChild(elem);
-  };
 }
 
-export default Slider;
+class Knob extends Control {
+  constructor(props) {
+    super(props);
+    this.type = "knob";
+  }
+}
+
+export default Fader;
