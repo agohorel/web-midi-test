@@ -89,6 +89,11 @@ label {
   color: var(--aleph-blue);
 }
 
+.knobs {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .knob {
   max-width: 100px;
 }

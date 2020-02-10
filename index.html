@@ -9,19 +9,15 @@
   <body>
     <p class="pot-val">potentiometer value:</p>
     <p class="btn-val">button value:</p>
-    <button class="button add">add fader</button>
-    <button class="button remove">remove fader</button>
+    <button class="button add-btn add">add fader</button>
+    <button class="button remove-btn remove">remove fader</button>
+    <button class="button add-knob add">add knob</button>
+    <button class="button remove-knob remove">remove knob</button>
     <div class="faders"></div>
-
-    <div class="knob">
-      <input class="knob-input" type="range" min="0" max="170" value="64" />
-      <svg viewbox="0 0 60 60">
-        <circle class="knob-background" cx="30" cy="30" r="27"></circle>
-        <circle class="knob-value" cx="30" cy="30" r="27"></circle>
-      </svg>
-    </div>
+    <div class="knobs"></div>
   </body>
   <script src="./midiDefinitions.js" type="module"></script>
   <script src="./uiComponents.js" type="module"></script>
   <script src="./midi.js" type="module"></script>
+  <script src="./dom.js" type="module"></script>
 </html>

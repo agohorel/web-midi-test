@@ -1,11 +1,8 @@
 import { definitions } from "./midiDefinitions.js";
-import Fader from "./uiComponents.js";
+import { faders, knobs } from "./dom.js";
 
 const potDisplay = document.querySelector(".pot-val");
 const btnDisplay = document.querySelector(".btn-val");
-const addFaderBtn = document.querySelector(".add");
-const removeFaderBtn = document.querySelector(".remove");
-let faders = [];
 
 init();
 
@@ -54,6 +51,7 @@ function onMIDIMessage(event) {
     case definitions.cc:
       potDisplay.textContent = `potentiometer value: ${velocity}`;
       faders.forEach(fader => fader.update(velocity));
+      knobs.forEach(knob => knob.update(velocity));
       break;
     default:
       null;
@@ -74,15 +72,3 @@ function onStateChange(event) {
 function onMIDIFailure(e) {
   console.log("no access to midi, something went wrong: ", e);
 }
-
-addFaderBtn.addEventListener("click", () => {
-  faders.push(
-    new Fader({ parent: ".faders", name: "volume", index: faders.length + 1 })
-  );
-  faders[faders.length - 1].create();
-});
-
-removeFaderBtn.addEventListener("click", () => {
-  faders[faders.length - 1].delete();
-  faders.pop();
-});
