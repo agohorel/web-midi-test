@@ -115,7 +115,7 @@ class Knob extends Control {
   update = cc => {
     this.input.value = cc;
     document.documentElement.style.setProperty(
-      "--fader-value",
+      "--knob-value",
       `${this.map(cc, 0, 127, 0, 170)}`
     );
   };
