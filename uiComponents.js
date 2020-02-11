@@ -60,7 +60,8 @@ class Knob extends Control {
     this.type = "knob";
     this.viewbox = null;
     this.knobBackground = null;
-    this.knobValue = this.initialValue;
+    this.knobValue = null;
+    this.value = this.initialValue;
     this.dragActive = false;
   }
 
@@ -91,12 +92,8 @@ class Knob extends Control {
     });
     this.viewbox.addEventListener("mousemove", e => {
       if (this.dragActive) {
-        this.knobValue = this.map(e.clientY, 294, 210, 0, 170);
-        // going to need a better approach - I think this will always change them all
-        document.documentElement.style.setProperty(
-          "--knob-value",
-          `${this.knobValue}`
-        );
+        this.value = this.map(e.clientY, 294, 210, 0, 170);
+        this.knobValue.setAttribute("stroke-dasharray", `${this.value}, 99999`);
       }
     });
 
