@@ -113,10 +113,10 @@ class Knob extends Control {
       "http://www.w3.org/2000/svg",
       "circle"
     );
-    this.knobBackground.setAttribute("cx", "30");
-    this.knobBackground.setAttribute("cy", "30");
-    this.knobBackground.setAttribute("r", "27");
-    this.knobBackground.classList.add("knob-value");
+    this.knobValue.setAttribute("cx", "30");
+    this.knobValue.setAttribute("cy", "30");
+    this.knobValue.setAttribute("r", "27");
+    this.knobValue.classList.add("knob-value");
 
     this.viewbox.appendChild(this.knobBackground);
     this.viewbox.appendChild(this.knobValue);
@@ -130,9 +130,9 @@ class Knob extends Control {
 
   update = cc => {
     this.input.value = cc;
-    document.documentElement.style.setProperty(
-      "--knob-value",
-      `${this.map(cc, 0, 127, 0, 170)}`
+    this.knobValue.setAttribute(
+      "stroke-dasharray",
+      `${this.map(cc, 0, 127, 0, 170)}, 99999`
     );
   };
 }

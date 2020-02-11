@@ -7,7 +7,6 @@
   --input-height: 20px;
   --fader-length: 200px;
   --fader-background: rgb(46, 50, 51);
-  --knob-value: 85;
 }
 
 * {
@@ -111,7 +110,6 @@ label {
 .knob-value {
   stroke-width: 6;
   stroke: var(--aleph-green);
-  stroke-dasharray: var(--knob-value), 99999;
   transform: rotate(90deg);
   fill: none;
   transform-origin: center;
