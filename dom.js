@@ -22,7 +22,7 @@ let knobs = [];
 
 addKnobBtn.addEventListener("click", () => {
   knobs.push(
-    new Knob({ parent: ".knobs", name: "eq", index: faders.length + 1 })
+    new Knob({ parent: ".knobs", name: "eq", index: knobs.length + 1 })
   );
   knobs[knobs.length - 1].create();
 });
