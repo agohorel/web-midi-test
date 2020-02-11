@@ -92,7 +92,8 @@ class Knob extends Control {
     });
     this.viewbox.addEventListener("mousemove", e => {
       if (this.dragActive) {
-        this.value = this.map(e.clientY, 294, 210, 0, 170);
+        // magic # 84 here is the height of the viewbox - if knob size changes, this needs to change!
+        this.value = this.map(e.offsetY, 84, 0, 0, 170);
         this.knobValue.setAttribute("stroke-dasharray", `${this.value}, 99999`);
       }
     });
