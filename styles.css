@@ -6,7 +6,6 @@
   --aleph-lightgrey: #d4e1e6;
   --input-height: 20px;
   --fader-length: 200px;
-  --fader-background: rgb(46, 50, 51);
 }
 
 * {
@@ -19,38 +18,6 @@ body {
   background: var(--aleph-nearblack);
   color: var(--aleph-lightgrey);
   font-family: monospace;
-}
-
-input[type="range"] {
-  -webkit-appearance: none;
-  background: transparent;
-  /* left spacing (bc of transform) */
-  margin-top: 50px;
-  transform: rotate(270deg);
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-}
-
-input[type="range"]:focus {
-  outline: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  height: 32px;
-  width: 16px;
-  margin-top: -12px;
-  background: var(--aleph-lightgrey);
-  cursor: pointer;
-  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.5);
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-  width: var(--fader-length);
-  height: 10px;
-  cursor: pointer;
-  background-color: var(--fader-background);
 }
 
 label {
@@ -97,7 +64,7 @@ label {
   max-width: 100px;
 }
 
-.knob-input {
+.hide-input {
   display: none;
 }
 
@@ -113,4 +80,13 @@ label {
   transform: rotate(90deg);
   fill: none;
   transform-origin: center;
+}
+
+.fader-background {
+  fill: var(--aleph-darkgrey);
+}
+
+.fader-handle {
+  fill: var(--aleph-blue);
+  transform: rotateX(180deg);
 }

@@ -23,6 +23,10 @@ class Fader extends Control {
   constructor(props) {
     super(props);
     this.type = "fader";
+    this.faderBackground = null;
+    this.faderHandle = null;
+    this.faderHeight = 200;
+    this.faderWidth = 15;
   }
 
   create = () => {
@@ -38,18 +42,53 @@ class Fader extends Control {
     this.input.min = 0;
     this.input.max = 127;
     this.input.value = this.initialValue;
+    this.input.classList.add("hide-input");
+
+    this.viewbox = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+    this.viewbox.setAttribute(
+      "viewBox",
+      `0 0 ${this.faderWidth} ${this.faderHeight}`
+    );
+
+    this.faderBackground = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect"
+    );
+    this.faderBackground.setAttribute("width", `${this.faderWidth}`);
+    this.faderBackground.setAttribute("height", `${this.faderHeight}`);
+    this.faderBackground.classList.add("fader-background");
+
+    this.faderHandle = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect"
+    );
+
+    this.faderHandle.setAttribute("y", `-${this.faderHeight}`);
+    this.faderHandle.setAttribute("width", `${this.faderWidth}`);
+    this.faderHandle.setAttribute(
+      "height",
+      `${this.map(this.initialValue, 0, 127, 0, this.faderHeight)}`
+    );
+    this.faderHandle.classList.add("fader-handle");
+
+    this.viewbox.appendChild(this.faderBackground);
+    this.viewbox.appendChild(this.faderHandle);
 
     this.component.appendChild(this.label);
     this.component.appendChild(this.input);
+    this.component.appendChild(this.viewbox);
 
     document.querySelector(this.parent).appendChild(this.component);
   };
 
   update = cc => {
     this.input.value = cc;
-    document.documentElement.style.setProperty(
-      "--fader-background",
-      `rgb(${cc}, ${cc}, ${cc})`
+    this.faderHandle.setAttribute(
+      "height",
+      `${this.map(cc, 0, 127, 0, this.faderHeight)}`
     );
   };
 }
@@ -77,7 +116,7 @@ class Knob extends Control {
     this.input.min = 0;
     this.input.max = 127;
     this.input.value = this.initialValue;
-    this.input.classList.add("knob-input");
+    this.input.classList.add("hide-input");
 
     this.viewbox = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -90,6 +129,7 @@ class Knob extends Control {
     this.viewbox.addEventListener("mouseup", () => {
       this.dragActive = false;
     });
+
     this.viewbox.addEventListener("mousemove", e => {
       if (this.dragActive) {
         // magic # 84 here is the height of the viewbox - if knob size changes, this needs to change!
