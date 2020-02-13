@@ -171,6 +171,7 @@ class Knob extends Control {
     this.knobBackground.setAttribute("cx", `${this.height / 2}`);
     this.knobBackground.setAttribute("cy", `${this.height / 2}`);
     this.knobBackground.setAttribute("r", `${this.height / 2 - 5}`);
+    this.knobBackground.setAttribute("stroke-width", `${this.strokeWidth}`);
     this.knobBackground.classList.add("knob-background");
 
     this.knobValue = document.createElementNS(

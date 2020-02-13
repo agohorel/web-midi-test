@@ -81,6 +81,7 @@ label {
 .knob-background {
   fill: none;
   transform-origin: center;
+  stroke: var(--aleph-darkgrey);
 }
 
 .knob-value {
