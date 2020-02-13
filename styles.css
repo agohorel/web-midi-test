@@ -5,7 +5,8 @@
   --aleph-darkgrey: #2e3233;
   --aleph-lightgrey: #d4e1e6;
   --input-height: 20px;
-  --fader-length: 200px;
+  --fader-height: 200px;
+  --fader-width: 20px;
 }
 
 * {
@@ -33,7 +34,13 @@ label {
 .fader {
   display: flex;
   flex-direction: column;
-  height: var(--fader-length);
+  align-items: center;
+}
+
+svg {
+  max-height: 200px;
+  max-width: 100px;
+  transform: translate(calc(50% - calc(var(--fader-width) / 2)), 0);
 }
 
 .button {

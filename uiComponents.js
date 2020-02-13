@@ -7,6 +7,8 @@ class Control {
     this.input = null;
     this.label = null;
     this.component = null;
+    this.dragActive = false;
+    this.value = this.initialValue;
   }
 
   delete = () => {
@@ -26,7 +28,7 @@ class Fader extends Control {
     this.faderBackground = null;
     this.faderHandle = null;
     this.faderHeight = 200;
-    this.faderWidth = 15;
+    this.faderWidth = 20;
   }
 
   create = () => {
@@ -48,10 +50,25 @@ class Fader extends Control {
       "http://www.w3.org/2000/svg",
       "svg"
     );
-    this.viewbox.setAttribute(
-      "viewBox",
-      `0 0 ${this.faderWidth} ${this.faderHeight}`
-    );
+    this.viewbox.setAttribute("height", this.faderHeight);
+    this.viewbox.addEventListener("mousedown", () => {
+      this.dragActive = true;
+    });
+    this.viewbox.addEventListener("mouseup", () => {
+      this.dragActive = false;
+    });
+    this.viewbox.addEventListener("mousemove", e => {
+      if (this.dragActive) {
+        this.value = this.map(
+          e.offsetY,
+          0,
+          this.faderHeight,
+          this.faderHeight,
+          0
+        );
+        this.faderHandle.setAttribute("height", `${this.value}`);
+      }
+    });
 
     this.faderBackground = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -65,7 +82,6 @@ class Fader extends Control {
       "http://www.w3.org/2000/svg",
       "rect"
     );
-
     this.faderHandle.setAttribute("y", `-${this.faderHeight}`);
     this.faderHandle.setAttribute("width", `${this.faderWidth}`);
     this.faderHandle.setAttribute(
@@ -100,8 +116,6 @@ class Knob extends Control {
     this.viewbox = null;
     this.knobBackground = null;
     this.knobValue = null;
-    this.value = this.initialValue;
-    this.dragActive = false;
   }
 
   create = () => {
