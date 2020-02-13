@@ -1,4 +1,4 @@
-import { Fader, Knob } from "./uiComponents.js";
+import { Fader, Knob, Button } from "./uiComponents.js";
 
 const addFaderBtn = document.querySelector(".add-btn");
 const removeFaderBtn = document.querySelector(".remove-btn");
@@ -32,4 +32,24 @@ removeKnobBtn.addEventListener("click", () => {
   knobs.pop();
 });
 
-export { faders, knobs };
+const addButtonBtn = document.querySelector(".add-button");
+const removeButtonBtn = document.querySelector(".remove-button");
+let buttons = [];
+
+addButtonBtn.addEventListener("click", () => {
+  buttons.push(
+    new Button({
+      parent: ".buttons",
+      name: "button",
+      index: buttons.length + 1
+    })
+  );
+  buttons[buttons.length - 1].create();
+});
+
+removeButtonBtn.addEventListener("click", () => {
+  buttons[buttons.length - 1].delete();
+  buttons.pop();
+});
+
+export { faders, knobs, buttons };

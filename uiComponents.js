@@ -170,7 +170,10 @@ class Knob extends Control {
     );
     this.knobBackground.setAttribute("cx", `${this.height / 2}`);
     this.knobBackground.setAttribute("cy", `${this.height / 2}`);
-    this.knobBackground.setAttribute("r", `${this.height / 2 - this.strokeWidth}`);
+    this.knobBackground.setAttribute(
+      "r",
+      `${this.height / 2 - this.strokeWidth}`
+    );
     this.knobBackground.setAttribute("stroke-width", `${this.strokeWidth}`);
     this.knobBackground.classList.add("knob-background");
 
@@ -209,4 +212,79 @@ class Knob extends Control {
   };
 }
 
-export { Fader, Knob };
+class Button extends Control {
+  constructor(props) {
+    super(props);
+    this.type = "button";
+    this.height = 50;
+    this.width = 50;
+    this.inset = 0.7;
+  }
+
+  create = () => {
+    this.component = document.createElement("div");
+    this.component.id = `${this.type}_${this.name}_${this.index}`;
+    this.component.classList.add(this.type);
+
+    this.label = document.createElement("label");
+    this.label.textContent = `${this.type}_${this.name}_${this.index}`;
+
+    this.input = document.createElement("input");
+    this.input.type = "checkbox";
+    this.input.value = this.initialValue;
+    // this.input.classList.add("hide-input");
+
+    this.viewbox = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+    this.viewbox.setAttribute("height", this.height);
+    this.viewbox.setAttribute("width", this.width);
+
+    this.buttonBackground = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect"
+    );
+    this.buttonBackground.setAttribute("width", this.width);
+    this.buttonBackground.setAttribute("height", this.height);
+
+    this.buttonValue = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "rect"
+    );
+    this.buttonValue.setAttribute("width", this.width * this.inset);
+    this.buttonValue.setAttribute("height", this.height * this.inset);
+    document.documentElement.style.setProperty(
+      "--button-inset",
+      `${((1 - this.inset) / 2) * 100}%`
+    );
+
+    console.log(document.documentElement.style);
+    // this.buttonValue.setAttribute(
+    //   "transform",
+    //   `translate(${(1 - this.inset) * 0.5}, ${(1 - this.inset) * 0.5})`
+    // );
+
+    // this.buttonValue.transform.baseVal
+    //   .getItem(0)
+    //   .setTranslate(
+    //     2.5,
+    //     2.5
+    //   );
+
+    this.buttonValue.classList.add("button-value");
+
+    this.viewbox.appendChild(this.buttonBackground);
+    this.viewbox.appendChild(this.buttonValue);
+
+    this.component.appendChild(this.label);
+    this.component.appendChild(this.input);
+    this.component.appendChild(this.viewbox);
+
+    document.querySelector(this.parent).appendChild(this.component);
+  };
+
+  update = cc => {};
+}
+
+export { Fader, Knob, Button };

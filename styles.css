@@ -8,6 +8,7 @@
   --fader-height: 200px;
   --fader-width: 20px;
   --knob-height: 100px;
+  --button-inset: 100%;
 }
 
 * {
@@ -44,13 +45,13 @@ label {
   transform: translate(calc(50% - calc(var(--fader-width) / 2)), 0);
 }
 
-.button {
+.btn {
   border: none;
   background-color: var(--aleph-darkgrey);
   padding: 10px 15px;
 }
 
-.button:hover {
+.btn:hover {
   cursor: pointer;
   background-color: #4c4c4c;
 }
@@ -98,4 +99,19 @@ label {
 .fader-handle {
   fill: var(--aleph-blue);
   transform: rotateX(180deg);
+}
+
+.buttons {
+  display: flex;
+}
+
+.button {
+  transform-origin: center;
+  fill: var(--aleph-darkgrey);
+}
+
+.button-value {
+  fill: var(--aleph-blue);
+  transform-origin: center;
+  transform: translate(var(--button-inset), var(--button-inset));
 }
