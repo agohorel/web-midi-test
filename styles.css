@@ -40,7 +40,7 @@ label {
 
 .faderSVG {
   max-height: var(--fader-height);
-  max-width: var(--fader-height);
+  max-width: var(--fader-width);
   transform: translate(calc(50% - calc(var(--fader-width) / 2)), 0);
 }
 
