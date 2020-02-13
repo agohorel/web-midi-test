@@ -232,7 +232,7 @@ class Button extends Control {
     this.input = document.createElement("input");
     this.input.type = "checkbox";
     this.input.value = this.initialValue;
-    // this.input.classList.add("hide-input");
+    this.input.classList.add("hide-input");
 
     this.viewbox = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -259,19 +259,6 @@ class Button extends Control {
       `${((1 - this.inset) / 2) * 100}%`
     );
 
-    console.log(document.documentElement.style);
-    // this.buttonValue.setAttribute(
-    //   "transform",
-    //   `translate(${(1 - this.inset) * 0.5}, ${(1 - this.inset) * 0.5})`
-    // );
-
-    // this.buttonValue.transform.baseVal
-    //   .getItem(0)
-    //   .setTranslate(
-    //     2.5,
-    //     2.5
-    //   );
-
     this.buttonValue.classList.add("button-value");
 
     this.viewbox.appendChild(this.buttonBackground);
@@ -284,7 +271,9 @@ class Button extends Control {
     document.querySelector(this.parent).appendChild(this.component);
   };
 
-  update = cc => {};
+  update = cc => {
+    this.buttonValue.style.opacity = this.map(cc, 0, 127, 0, 100);
+  };
 }
 
 export { Fader, Knob, Button };

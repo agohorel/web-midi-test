@@ -1,5 +1,5 @@
 import { definitions } from "./midiDefinitions.js";
-import { faders, knobs } from "./dom.js";
+import { faders, knobs, buttons } from "./dom.js";
 
 const potDisplay = document.querySelector(".pot-val");
 const btnDisplay = document.querySelector(".btn-val");
@@ -47,6 +47,7 @@ function onMIDIMessage(event) {
     case definitions.noteOn:
     case definitions.noteOff:
       btnDisplay.textContent = `button value: ${velocity}`;
+      buttons.forEach(button => button.update(velocity));
       break;
     case definitions.cc:
       potDisplay.textContent = `potentiometer value: ${velocity}`;
