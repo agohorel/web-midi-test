@@ -274,6 +274,7 @@ class Button extends Control {
 
   update = cc => {
     this.buttonValue.style.opacity = this.map(cc, 0, 127, 0, 100);
+    this.value = cc;
   };
 }
 
