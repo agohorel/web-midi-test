@@ -218,7 +218,7 @@ class Button extends Control {
     this.type = "button";
     this.height = 50;
     this.width = 50;
-    this.inset = 0.7;
+    this.inset = 0.8;
   }
 
   create = () => {
@@ -254,6 +254,7 @@ class Button extends Control {
     );
     this.buttonValue.setAttribute("width", this.width * this.inset);
     this.buttonValue.setAttribute("height", this.height * this.inset);
+    this.buttonValue.style.opacity = 0;
     document.documentElement.style.setProperty(
       "--button-inset",
       `${((1 - this.inset) / 2) * 100}%`
