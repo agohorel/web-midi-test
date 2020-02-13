@@ -219,6 +219,7 @@ class Button extends Control {
     this.height = 50;
     this.width = 50;
     this.inset = 0.8;
+    this.isActive = false;
   }
 
   create = () => {
@@ -240,6 +241,17 @@ class Button extends Control {
     );
     this.viewbox.setAttribute("height", this.height);
     this.viewbox.setAttribute("width", this.width);
+    this.viewbox.addEventListener("click", () => {
+      this.isActive = !this.isActive;
+
+      if (this.isActive) {
+        this.buttonValue.style.opacity = 100;
+        this.value = 127;
+      } else {
+        this.buttonValue.style.opacity = 0;
+        this.value = 0;
+      }
+    });
 
     this.buttonBackground = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -255,6 +267,7 @@ class Button extends Control {
     this.buttonValue.setAttribute("width", this.width * this.inset);
     this.buttonValue.setAttribute("height", this.height * this.inset);
     this.buttonValue.style.opacity = 0;
+
     document.documentElement.style.setProperty(
       "--button-inset",
       `${((1 - this.inset) / 2) * 100}%`
