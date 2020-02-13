@@ -69,6 +69,7 @@ class Fader extends Control {
         this.faderHandle.setAttribute("height", `${this.value}`);
       }
     });
+    this.viewbox.classList.add("faderSVG");
 
     this.faderBackground = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -116,11 +117,14 @@ class Knob extends Control {
     this.viewbox = null;
     this.knobBackground = null;
     this.knobValue = null;
+    this.height = 85;
+    this.strokeWidth = 8;
   }
 
   create = () => {
     this.component = document.createElement("div");
     this.component.id = `${this.type}_${this.name}_${this.index}`;
+    this.component.classList.add(this.type);
 
     this.label = document.createElement("label");
     this.label.textContent = `${this.type}_${this.name}_${this.index}`;
@@ -136,7 +140,10 @@ class Knob extends Control {
       "http://www.w3.org/2000/svg",
       "svg"
     );
-    this.viewbox.setAttribute("viewBox", "0 0 60 60");
+
+    this.viewbox.setAttribute("height", `${this.height}`);
+    this.viewbox.setAttribute("width", `${this.height}`);
+    this.viewbox.setAttribute("width", `${this.height}`);
     this.viewbox.addEventListener("mousedown", () => {
       this.dragActive = true;
     });
@@ -146,8 +153,13 @@ class Knob extends Control {
 
     this.viewbox.addEventListener("mousemove", e => {
       if (this.dragActive) {
-        // magic # 84 here is the height of the viewbox - if knob size changes, this needs to change!
-        this.value = this.map(e.offsetY, 84, 0, 0, 170);
+        this.value = this.map(
+          e.offsetY,
+          this.height,
+          0,
+          0,
+          2 * Math.PI * (this.height / 2 - 5)
+        );
         this.knobValue.setAttribute("stroke-dasharray", `${this.value}, 99999`);
       }
     });
@@ -156,18 +168,19 @@ class Knob extends Control {
       "http://www.w3.org/2000/svg",
       "circle"
     );
-    this.knobBackground.setAttribute("cx", "30");
-    this.knobBackground.setAttribute("cy", "30");
-    this.knobBackground.setAttribute("r", "27");
+    this.knobBackground.setAttribute("cx", `${this.height / 2}`);
+    this.knobBackground.setAttribute("cy", `${this.height / 2}`);
+    this.knobBackground.setAttribute("r", `${this.height / 2 - 5}`);
     this.knobBackground.classList.add("knob-background");
 
     this.knobValue = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "circle"
     );
-    this.knobValue.setAttribute("cx", "30");
-    this.knobValue.setAttribute("cy", "30");
-    this.knobValue.setAttribute("r", "27");
+    this.knobValue.setAttribute("cx", `${this.height / 2}`);
+    this.knobValue.setAttribute("cy", `${this.height / 2}`);
+    this.knobValue.setAttribute("r", `${this.height / 2 - this.strokeWidth}`);
+    this.knobValue.setAttribute("stroke-width", `${this.strokeWidth}`);
     this.knobValue.classList.add("knob-value");
 
     this.viewbox.appendChild(this.knobBackground);
@@ -184,7 +197,13 @@ class Knob extends Control {
     this.input.value = cc;
     this.knobValue.setAttribute(
       "stroke-dasharray",
-      `${this.map(cc, 0, 127, 0, 170)}, 99999`
+      `${this.map(
+        cc,
+        0,
+        127,
+        0,
+        2 * Math.PI * (this.height / 2 - this.strokeWidth)
+      )}, 99999`
     );
   };
 }

@@ -7,6 +7,7 @@
   --input-height: 20px;
   --fader-height: 200px;
   --fader-width: 20px;
+  --knob-height: 100px;
 }
 
 * {
@@ -37,9 +38,9 @@ label {
   align-items: center;
 }
 
-svg {
-  max-height: 200px;
-  max-width: 100px;
+.faderSVG {
+  max-height: var(--fader-height);
+  max-width: var(--fader-height);
   transform: translate(calc(50% - calc(var(--fader-width) / 2)), 0);
 }
 
@@ -67,22 +68,22 @@ svg {
   flex-wrap: wrap;
 }
 
-.knob {
-  max-width: 100px;
-}
-
 .hide-input {
   display: none;
 }
 
+.knob {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .knob-background {
-  stroke-width: 6;
   fill: none;
   transform-origin: center;
 }
 
 .knob-value {
-  stroke-width: 6;
   stroke: var(--aleph-green);
   transform: rotate(90deg);
   fill: none;
