@@ -216,8 +216,8 @@ class Button extends Control {
   constructor(props) {
     super(props);
     this.type = "button";
-    this.height = 50;
-    this.width = 50;
+    this.height = 40;
+    this.width = 40;
     this.inset = 0.8;
     this.isActive = false;
   }
