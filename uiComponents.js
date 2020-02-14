@@ -173,6 +173,16 @@ class Knob extends Control {
     this.knobValue.setAttribute("cy", `${this.diameter / 2}`);
     this.knobValue.setAttribute("r", `${this.diameter / 2 - this.strokeWidth}`);
     this.knobValue.setAttribute("stroke-width", `${this.strokeWidth}`);
+    this.knobValue.setAttribute(
+      "stroke-dasharray",
+      `${this.map(
+        this.value,
+        0,
+        127,
+        0,
+        2 * Math.PI * (this.diameter / 2 - this.strokeWidth)
+      )}, 99999`
+    );
     this.knobValue.classList.add("knob-value");
 
     this.svg.appendChild(this.knobBackground);
