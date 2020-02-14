@@ -7,6 +7,8 @@ class Control {
     this.name = props.name;
     this.index = props.index;
     this.initialValue = 64;
+    this.minValue = 0;
+    this.maxValue = 127;
     this.value = this.initialValue;
     this.isDraggable = false;
   }
@@ -36,18 +38,17 @@ class Fader extends Control {
     this.component.id = `${this.type}_${this.name}_${this.index}`;
     this.component.classList.add(this.type);
 
-    this.label = document.createElement("label");
-    this.label.textContent = `${this.type}_${this.name}_${this.index}`;
+    this.label = createLabel(this.type, this.name, this.index);
 
-    this.input = document.createElement("input");
-    this.input.type = "range";
-    this.input.min = 0;
-    this.input.max = 127;
-    this.input.value = this.initialValue;
-    this.input.classList.add("hide-input");
+    this.input = createInput(
+      "range",
+      this.initialValue,
+      this.minValue,
+      this.maxValue
+    );
 
-    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    this.svg.setAttribute("height", this.height);
+    this.svg = createSVG(this.width, this.height);
+
     this.svg.addEventListener("mousedown", () => {
       this.isDraggable = true;
     });
@@ -117,28 +118,22 @@ class Knob extends Control {
     this.component.id = `${this.type}_${this.name}_${this.index}`;
     this.component.classList.add(this.type);
 
-    this.label = document.createElement("label");
-    this.label.textContent = `${this.type}_${this.name}_${this.index}`;
+    this.label = createLabel(this.type, this.name, this.index);
 
-    this.input = document.createElement("input");
-    this.input.type = "range";
-    this.input.min = 0;
-    this.input.max = 127;
-    this.input.value = this.initialValue;
-    this.input.classList.add("hide-input");
+    this.input = createInput(
+      "range",
+      this.initialValue,
+      this.minValue,
+      this.maxValue
+    );
 
-    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
-    this.svg.setAttribute("height", `${this.diameter}`);
-    this.svg.setAttribute("width", `${this.diameter}`);
-    this.svg.setAttribute("width", `${this.diameter}`);
+    this.svg = createSVG(this.diameter, this.diameter);
     this.svg.addEventListener("mousedown", () => {
       this.isDraggable = true;
     });
     this.svg.addEventListener("mouseup", () => {
       this.isDraggable = false;
     });
-
     this.svg.addEventListener("mousemove", e => {
       if (this.isDraggable) {
         this.value = this.map(
@@ -224,20 +219,13 @@ class Button extends Control {
     this.component.id = `${this.type}_${this.name}_${this.index}`;
     this.component.classList.add(this.type);
 
-    this.label = document.createElement("label");
-    this.label.textContent = `${this.type}_${this.name}_${this.index}`;
+    this.label = createLabel(this.type, this.name, this.index);
 
-    this.input = document.createElement("input");
-    this.input.type = "checkbox";
-    this.input.value = this.initialValue;
-    this.input.classList.add("hide-input");
+    this.input = createInput("checkbox", this.initialValue);
 
-    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    this.svg.setAttribute("height", this.length);
-    this.svg.setAttribute("width", this.length);
+    this.svg = createSVG(this.length, this.length);
     this.svg.addEventListener("click", () => {
       this.isActive = !this.isActive;
-
       if (this.isActive) {
         this.buttonValue.style.opacity = 100;
         this.value = 127;
@@ -286,3 +274,28 @@ class Button extends Control {
 }
 
 export { Fader, Knob, Button };
+
+function createInput(type, initialValue, min, max) {
+  const input = document.createElement("input");
+  input.type = type;
+  input.value = initialValue;
+  input.classList.add("hide-input");
+  if (type === "range") {
+    input.min = min;
+    input.max = max;
+  }
+  return input;
+}
+
+function createLabel(type, name, index) {
+  const label = document.createElement("label");
+  label.textContent = `${type}_${name}_${index}`;
+  return label;
+}
+
+function createSVG(width, height) {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", `${width}`);
+  svg.setAttribute("height", `${height}`);
+  return svg;
+}
