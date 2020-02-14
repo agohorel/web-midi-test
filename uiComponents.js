@@ -1,14 +1,14 @@
 class Control {
   constructor(props) {
     this.parent = props.parent;
+    this.component = null;
+    this.label = null;
+    this.input = null;
     this.name = props.name;
     this.index = props.index;
     this.initialValue = 64;
-    this.input = null;
-    this.label = null;
-    this.component = null;
-    this.dragActive = false;
     this.value = this.initialValue;
+    this.isDraggable = false;
   }
 
   delete = () => {
@@ -26,9 +26,9 @@ class Fader extends Control {
     super(props);
     this.type = "fader";
     this.faderBackground = null;
-    this.faderHandle = null;
-    this.faderHeight = 200;
-    this.faderWidth = 20;
+    this.faderValue = null;
+    this.height = 200;
+    this.width = 20;
   }
 
   create = () => {
@@ -46,66 +46,57 @@ class Fader extends Control {
     this.input.value = this.initialValue;
     this.input.classList.add("hide-input");
 
-    this.viewbox = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
-    this.viewbox.setAttribute("height", this.faderHeight);
-    this.viewbox.addEventListener("mousedown", () => {
-      this.dragActive = true;
+    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.svg.setAttribute("height", this.height);
+    this.svg.addEventListener("mousedown", () => {
+      this.isDraggable = true;
     });
-    this.viewbox.addEventListener("mouseup", () => {
-      this.dragActive = false;
+    this.svg.addEventListener("mouseup", () => {
+      this.isDraggable = false;
     });
-    this.viewbox.addEventListener("mousemove", e => {
-      if (this.dragActive) {
-        this.value = this.map(
-          e.offsetY,
-          0,
-          this.faderHeight,
-          this.faderHeight,
-          0
-        );
-        this.faderHandle.setAttribute("height", `${this.value}`);
+    this.svg.addEventListener("mousemove", e => {
+      if (this.isDraggable) {
+        this.value = this.map(e.offsetY, 0, this.height, this.height, 0);
+        this.faderValue.setAttribute("height", `${this.value}`);
       }
     });
-    this.viewbox.classList.add("faderSVG");
+    this.svg.classList.add("faderSVG");
 
     this.faderBackground = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "rect"
     );
-    this.faderBackground.setAttribute("width", `${this.faderWidth}`);
-    this.faderBackground.setAttribute("height", `${this.faderHeight}`);
+    this.faderBackground.setAttribute("width", `${this.width}`);
+    this.faderBackground.setAttribute("height", `${this.height}`);
     this.faderBackground.classList.add("fader-background");
 
-    this.faderHandle = document.createElementNS(
+    this.faderValue = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "rect"
     );
-    this.faderHandle.setAttribute("y", `-${this.faderHeight}`);
-    this.faderHandle.setAttribute("width", `${this.faderWidth}`);
-    this.faderHandle.setAttribute(
+    this.faderValue.setAttribute("y", `-${this.height}`);
+    this.faderValue.setAttribute("width", `${this.width}`);
+    this.faderValue.setAttribute(
       "height",
-      `${this.map(this.initialValue, 0, 127, 0, this.faderHeight)}`
+      `${this.map(this.initialValue, 0, 127, 0, this.height)}`
     );
-    this.faderHandle.classList.add("fader-handle");
+    this.faderValue.classList.add("fader-handle");
 
-    this.viewbox.appendChild(this.faderBackground);
-    this.viewbox.appendChild(this.faderHandle);
+    this.svg.appendChild(this.faderBackground);
+    this.svg.appendChild(this.faderValue);
 
     this.component.appendChild(this.label);
     this.component.appendChild(this.input);
-    this.component.appendChild(this.viewbox);
+    this.component.appendChild(this.svg);
 
     document.querySelector(this.parent).appendChild(this.component);
   };
 
   update = cc => {
     this.input.value = cc;
-    this.faderHandle.setAttribute(
+    this.faderValue.setAttribute(
       "height",
-      `${this.map(cc, 0, 127, 0, this.faderHeight)}`
+      `${this.map(cc, 0, 127, 0, this.height)}`
     );
   };
 }
@@ -114,10 +105,10 @@ class Knob extends Control {
   constructor(props) {
     super(props);
     this.type = "knob";
-    this.viewbox = null;
+    this.svg = null;
     this.knobBackground = null;
     this.knobValue = null;
-    this.height = 85;
+    this.diameter = 85;
     this.strokeWidth = 8;
   }
 
@@ -136,29 +127,26 @@ class Knob extends Control {
     this.input.value = this.initialValue;
     this.input.classList.add("hide-input");
 
-    this.viewbox = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
+    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-    this.viewbox.setAttribute("height", `${this.height}`);
-    this.viewbox.setAttribute("width", `${this.height}`);
-    this.viewbox.setAttribute("width", `${this.height}`);
-    this.viewbox.addEventListener("mousedown", () => {
-      this.dragActive = true;
+    this.svg.setAttribute("height", `${this.diameter}`);
+    this.svg.setAttribute("width", `${this.diameter}`);
+    this.svg.setAttribute("width", `${this.diameter}`);
+    this.svg.addEventListener("mousedown", () => {
+      this.isDraggable = true;
     });
-    this.viewbox.addEventListener("mouseup", () => {
-      this.dragActive = false;
+    this.svg.addEventListener("mouseup", () => {
+      this.isDraggable = false;
     });
 
-    this.viewbox.addEventListener("mousemove", e => {
-      if (this.dragActive) {
+    this.svg.addEventListener("mousemove", e => {
+      if (this.isDraggable) {
         this.value = this.map(
           e.offsetY,
-          this.height,
+          this.diameter,
           0,
           0,
-          2 * Math.PI * (this.height / 2 - 5)
+          2 * Math.PI * (this.diameter / 2 - 5)
         );
         this.knobValue.setAttribute("stroke-dasharray", `${this.value}, 99999`);
       }
@@ -168,11 +156,11 @@ class Knob extends Control {
       "http://www.w3.org/2000/svg",
       "circle"
     );
-    this.knobBackground.setAttribute("cx", `${this.height / 2}`);
-    this.knobBackground.setAttribute("cy", `${this.height / 2}`);
+    this.knobBackground.setAttribute("cx", `${this.diameter / 2}`);
+    this.knobBackground.setAttribute("cy", `${this.diameter / 2}`);
     this.knobBackground.setAttribute(
       "r",
-      `${this.height / 2 - this.strokeWidth}`
+      `${this.diameter / 2 - this.strokeWidth}`
     );
     this.knobBackground.setAttribute("stroke-width", `${this.strokeWidth}`);
     this.knobBackground.classList.add("knob-background");
@@ -181,18 +169,18 @@ class Knob extends Control {
       "http://www.w3.org/2000/svg",
       "circle"
     );
-    this.knobValue.setAttribute("cx", `${this.height / 2}`);
-    this.knobValue.setAttribute("cy", `${this.height / 2}`);
-    this.knobValue.setAttribute("r", `${this.height / 2 - this.strokeWidth}`);
+    this.knobValue.setAttribute("cx", `${this.diameter / 2}`);
+    this.knobValue.setAttribute("cy", `${this.diameter / 2}`);
+    this.knobValue.setAttribute("r", `${this.diameter / 2 - this.strokeWidth}`);
     this.knobValue.setAttribute("stroke-width", `${this.strokeWidth}`);
     this.knobValue.classList.add("knob-value");
 
-    this.viewbox.appendChild(this.knobBackground);
-    this.viewbox.appendChild(this.knobValue);
+    this.svg.appendChild(this.knobBackground);
+    this.svg.appendChild(this.knobValue);
 
     this.component.appendChild(this.label);
     this.component.appendChild(this.input);
-    this.component.appendChild(this.viewbox);
+    this.component.appendChild(this.svg);
 
     document.querySelector(this.parent).appendChild(this.component);
   };
@@ -206,7 +194,7 @@ class Knob extends Control {
         0,
         127,
         0,
-        2 * Math.PI * (this.height / 2 - this.strokeWidth)
+        2 * Math.PI * (this.diameter / 2 - this.strokeWidth)
       )}, 99999`
     );
   };
@@ -216,8 +204,7 @@ class Button extends Control {
   constructor(props) {
     super(props);
     this.type = "button";
-    this.height = 40;
-    this.width = 40;
+    this.length = 40;
     this.inset = 0.8;
     this.isActive = false;
   }
@@ -235,13 +222,10 @@ class Button extends Control {
     this.input.value = this.initialValue;
     this.input.classList.add("hide-input");
 
-    this.viewbox = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
-    this.viewbox.setAttribute("height", this.height);
-    this.viewbox.setAttribute("width", this.width);
-    this.viewbox.addEventListener("click", () => {
+    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    this.svg.setAttribute("height", this.length);
+    this.svg.setAttribute("width", this.length);
+    this.svg.addEventListener("click", () => {
       this.isActive = !this.isActive;
 
       if (this.isActive) {
@@ -257,15 +241,15 @@ class Button extends Control {
       "http://www.w3.org/2000/svg",
       "rect"
     );
-    this.buttonBackground.setAttribute("width", this.width);
-    this.buttonBackground.setAttribute("height", this.height);
+    this.buttonBackground.setAttribute("width", this.length);
+    this.buttonBackground.setAttribute("height", this.length);
 
     this.buttonValue = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "rect"
     );
-    this.buttonValue.setAttribute("width", this.width * this.inset);
-    this.buttonValue.setAttribute("height", this.height * this.inset);
+    this.buttonValue.setAttribute("width", this.length * this.inset);
+    this.buttonValue.setAttribute("height", this.length * this.inset);
     this.buttonValue.style.opacity = 0;
 
     document.documentElement.style.setProperty(
@@ -275,12 +259,12 @@ class Button extends Control {
 
     this.buttonValue.classList.add("button-value");
 
-    this.viewbox.appendChild(this.buttonBackground);
-    this.viewbox.appendChild(this.buttonValue);
+    this.svg.appendChild(this.buttonBackground);
+    this.svg.appendChild(this.buttonValue);
 
     this.component.appendChild(this.label);
     this.component.appendChild(this.input);
-    this.component.appendChild(this.viewbox);
+    this.component.appendChild(this.svg);
 
     document.querySelector(this.parent).appendChild(this.component);
   };
