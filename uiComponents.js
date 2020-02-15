@@ -39,7 +39,6 @@ class Control {
   };
 
   createSVG = (svgElement, paramsObj, className) => {
-    console.log(paramsObj);
     const svg = document.createElementNS(
       "http://www.w3.org/2000/svg",
       svgElement
@@ -174,7 +173,7 @@ class Knob extends Control {
       if (this.isDraggable) {
         this.value = this.map(
           e.offsetY,
-          this.diameter,
+          this.diameter - 1,
           0,
           0,
           2 * Math.PI * (this.diameter / 2 - 5)
