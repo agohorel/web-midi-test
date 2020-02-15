@@ -96,7 +96,7 @@ class Fader extends Control {
     });
     this.svg.addEventListener("mousemove", e => {
       if (this.isDraggable) {
-        this.value = this.map(e.offsetY, 0, this.height, this.height, 0);
+        this.value = this.map(e.offsetY, 0, this.height - 1, this.height, 0);
         this.faderValue.setAttribute("height", `${this.value}`);
       }
     });
