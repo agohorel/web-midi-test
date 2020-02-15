@@ -225,14 +225,7 @@ class Button extends Control {
 
     this.svg = createSVG(this.length, this.length);
     this.svg.addEventListener("click", () => {
-      this.isActive = !this.isActive;
-      if (this.isActive) {
-        this.buttonValue.style.opacity = 100;
-        this.value = 127;
-      } else {
-        this.buttonValue.style.opacity = 0;
-        this.value = 0;
-      }
+      this.toggleButtonState();
     });
 
     this.buttonBackground = document.createElementNS(
@@ -270,6 +263,18 @@ class Button extends Control {
   update = cc => {
     this.buttonValue.style.opacity = this.map(cc, 0, 127, 0, 100);
     this.value = cc;
+    if (this.value === 0) this.isActive = false;
+  };
+
+  toggleButtonState = () => {
+    this.isActive = !this.isActive;
+    if (this.isActive) {
+      this.buttonValue.style.opacity = 100;
+      this.value = 127;
+    } else {
+      this.buttonValue.style.opacity = 0;
+      this.value = 0;
+    }
   };
 }
 
