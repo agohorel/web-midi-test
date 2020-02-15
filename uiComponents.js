@@ -13,6 +13,13 @@ class Control {
     this.isDraggable = false;
   }
 
+  createComponent = () => {
+    const component = document.createElement("div");
+    component.id = `${this.type}_${this.name}_${this.index}`;
+    component.classList.add(this.type);
+    return component;
+  };
+
   delete = () => {
     const elem = document.querySelector(`#${this.component.id}`);
     elem.parentNode.removeChild(elem);
@@ -34,9 +41,7 @@ class Fader extends Control {
   }
 
   create = () => {
-    this.component = document.createElement("div");
-    this.component.id = `${this.type}_${this.name}_${this.index}`;
-    this.component.classList.add(this.type);
+    this.component = this.createComponent();
 
     this.label = createLabel(this.type, this.name, this.index);
 
@@ -113,9 +118,7 @@ class Knob extends Control {
   }
 
   create = () => {
-    this.component = document.createElement("div");
-    this.component.id = `${this.type}_${this.name}_${this.index}`;
-    this.component.classList.add(this.type);
+    this.component = this.createComponent();
 
     this.label = createLabel(this.type, this.name, this.index);
 
@@ -213,9 +216,7 @@ class Button extends Control {
   }
 
   create = () => {
-    this.component = document.createElement("div");
-    this.component.id = `${this.type}_${this.name}_${this.index}`;
-    this.component.classList.add(this.type);
+    this.component = this.createComponent();
 
     this.label = createLabel(this.type, this.name, this.index);
 
