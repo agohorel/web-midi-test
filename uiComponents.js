@@ -47,7 +47,11 @@ class Fader extends Control {
       this.maxValue
     );
 
-    this.svg = createSVG(this.width, this.height);
+    this.svg = createSVG(
+      "svg",
+      { width: this.width, height: this.height },
+      "faderSVG"
+    );
 
     this.svg.addEventListener("mousedown", () => {
       this.isDraggable = true;
@@ -61,27 +65,22 @@ class Fader extends Control {
         this.faderValue.setAttribute("height", `${this.value}`);
       }
     });
-    this.svg.classList.add("faderSVG");
 
-    this.faderBackground = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "rect"
+    this.faderBackground = createSVG(
+      "rect",
+      { width: this.width, height: this.height },
+      "fader-background"
     );
-    this.faderBackground.setAttribute("width", `${this.width}`);
-    this.faderBackground.setAttribute("height", `${this.height}`);
-    this.faderBackground.classList.add("fader-background");
 
-    this.faderValue = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "rect"
+    this.faderValue = createSVG(
+      "rect",
+      {
+        width: this.width,
+        height: `${this.map(this.initialValue, 0, 127, 0, this.height)}`,
+        y: `-${this.height}`
+      },
+      "fader-handle"
     );
-    this.faderValue.setAttribute("y", `-${this.height}`);
-    this.faderValue.setAttribute("width", `${this.width}`);
-    this.faderValue.setAttribute(
-      "height",
-      `${this.map(this.initialValue, 0, 127, 0, this.height)}`
-    );
-    this.faderValue.classList.add("fader-handle");
 
     this.svg.appendChild(this.faderBackground);
     this.svg.appendChild(this.faderValue);
@@ -127,7 +126,10 @@ class Knob extends Control {
       this.maxValue
     );
 
-    this.svg = createSVG(this.diameter, this.diameter);
+    this.svg = createSVG("svg", {
+      width: this.diameter,
+      height: this.diameter
+    });
     this.svg.addEventListener("mousedown", () => {
       this.isDraggable = true;
     });
@@ -147,38 +149,34 @@ class Knob extends Control {
       }
     });
 
-    this.knobBackground = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "circle"
+    this.knobBackground = createSVG(
+      "circle",
+      {
+        cx: this.diameter / 2,
+        cy: this.diameter / 2,
+        r: this.diameter / 2 - this.strokeWidth,
+        "stroke-width": this.strokeWidth
+      },
+      "knob-background"
     );
-    this.knobBackground.setAttribute("cx", `${this.diameter / 2}`);
-    this.knobBackground.setAttribute("cy", `${this.diameter / 2}`);
-    this.knobBackground.setAttribute(
-      "r",
-      `${this.diameter / 2 - this.strokeWidth}`
-    );
-    this.knobBackground.setAttribute("stroke-width", `${this.strokeWidth}`);
-    this.knobBackground.classList.add("knob-background");
 
-    this.knobValue = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "circle"
+    this.knobValue = createSVG(
+      "circle",
+      {
+        cx: this.diameter / 2,
+        cy: this.diameter / 2,
+        r: this.diameter / 2 - this.strokeWidth,
+        "stroke-width": this.strokeWidth,
+        "stroke-dasharray": this.map(
+          this.value,
+          0,
+          127,
+          0,
+          2 * Math.PI * (this.diameter / 2 - this.strokeWidth)
+        )
+      },
+      "knob-value"
     );
-    this.knobValue.setAttribute("cx", `${this.diameter / 2}`);
-    this.knobValue.setAttribute("cy", `${this.diameter / 2}`);
-    this.knobValue.setAttribute("r", `${this.diameter / 2 - this.strokeWidth}`);
-    this.knobValue.setAttribute("stroke-width", `${this.strokeWidth}`);
-    this.knobValue.setAttribute(
-      "stroke-dasharray",
-      `${this.map(
-        this.value,
-        0,
-        127,
-        0,
-        2 * Math.PI * (this.diameter / 2 - this.strokeWidth)
-      )}, 99999`
-    );
-    this.knobValue.classList.add("knob-value");
 
     this.svg.appendChild(this.knobBackground);
     this.svg.appendChild(this.knobValue);
@@ -223,32 +221,31 @@ class Button extends Control {
 
     this.input = createInput("checkbox", this.initialValue);
 
-    this.svg = createSVG(this.length, this.length);
+    this.svg = createSVG("svg", { width: this.length, height: this.length });
     this.svg.addEventListener("click", () => {
       this.toggleButtonState();
     });
 
-    this.buttonBackground = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "rect"
-    );
-    this.buttonBackground.setAttribute("width", this.length);
-    this.buttonBackground.setAttribute("height", this.length);
+    this.buttonBackground = createSVG("rect", {
+      width: this.length,
+      height: this.length
+    });
 
-    this.buttonValue = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "rect"
+    this.buttonValue = createSVG(
+      "rect",
+      {
+        width: this.length * this.inset,
+        height: this.length * this.inset
+      },
+      "button-value"
     );
-    this.buttonValue.setAttribute("width", this.length * this.inset);
-    this.buttonValue.setAttribute("height", this.length * this.inset);
+
     this.buttonValue.style.opacity = 0;
 
     document.documentElement.style.setProperty(
       "--button-inset",
       `${((1 - this.inset) / 2) * 100}%`
     );
-
-    this.buttonValue.classList.add("button-value");
 
     this.svg.appendChild(this.buttonBackground);
     this.svg.appendChild(this.buttonValue);
@@ -298,9 +295,14 @@ function createLabel(type, name, index) {
   return label;
 }
 
-function createSVG(width, height) {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("width", `${width}`);
-  svg.setAttribute("height", `${height}`);
+function createSVG(svgElement, paramsObj, className) {
+  const svg = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    svgElement
+  );
+  Object.keys(paramsObj).forEach(param => {
+    svg.setAttribute(param, paramsObj[param]);
+  });
+  if (className) svg.classList.add(className);
   return svg;
 }
