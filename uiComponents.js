@@ -20,6 +20,37 @@ class Control {
     return component;
   };
 
+  createInput = (type, initialValue, min, max) => {
+    const input = document.createElement("input");
+    input.type = type;
+    input.value = initialValue;
+    input.classList.add("hide-input");
+    if (type === "range") {
+      input.min = min;
+      input.max = max;
+    }
+    return input;
+  };
+
+  createLabel = (type, name, index) => {
+    const label = document.createElement("label");
+    label.textContent = `${type}_${name}_${index}`;
+    return label;
+  };
+
+  createSVG = (svgElement, paramsObj, className) => {
+    console.log(paramsObj);
+    const svg = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      svgElement
+    );
+    Object.keys(paramsObj).forEach(param => {
+      svg.setAttribute(param, paramsObj[param]);
+    });
+    if (className) svg.classList.add(className);
+    return svg;
+  };
+
   delete = () => {
     const elem = document.querySelector(`#${this.component.id}`);
     elem.parentNode.removeChild(elem);
@@ -43,16 +74,16 @@ class Fader extends Control {
   create = () => {
     this.component = this.createComponent();
 
-    this.label = createLabel(this.type, this.name, this.index);
+    this.label = this.createLabel(this.type, this.name, this.index);
 
-    this.input = createInput(
+    this.input = this.createInput(
       "range",
       this.initialValue,
       this.minValue,
       this.maxValue
     );
 
-    this.svg = createSVG(
+    this.svg = this.createSVG(
       "svg",
       { width: this.width, height: this.height },
       "faderSVG"
@@ -71,13 +102,13 @@ class Fader extends Control {
       }
     });
 
-    this.faderBackground = createSVG(
+    this.faderBackground = this.createSVG(
       "rect",
       { width: this.width, height: this.height },
       "fader-background"
     );
 
-    this.faderValue = createSVG(
+    this.faderValue = this.createSVG(
       "rect",
       {
         width: this.width,
@@ -120,16 +151,16 @@ class Knob extends Control {
   create = () => {
     this.component = this.createComponent();
 
-    this.label = createLabel(this.type, this.name, this.index);
+    this.label = this.createLabel(this.type, this.name, this.index);
 
-    this.input = createInput(
+    this.input = this.createInput(
       "range",
       this.initialValue,
       this.minValue,
       this.maxValue
     );
 
-    this.svg = createSVG("svg", {
+    this.svg = this.createSVG("svg", {
       width: this.diameter,
       height: this.diameter
     });
@@ -152,7 +183,7 @@ class Knob extends Control {
       }
     });
 
-    this.knobBackground = createSVG(
+    this.knobBackground = this.createSVG(
       "circle",
       {
         cx: this.diameter / 2,
@@ -163,7 +194,7 @@ class Knob extends Control {
       "knob-background"
     );
 
-    this.knobValue = createSVG(
+    this.knobValue = this.createSVG(
       "circle",
       {
         cx: this.diameter / 2,
@@ -218,21 +249,24 @@ class Button extends Control {
   create = () => {
     this.component = this.createComponent();
 
-    this.label = createLabel(this.type, this.name, this.index);
+    this.label = this.createLabel(this.type, this.name, this.index);
 
-    this.input = createInput("checkbox", this.initialValue);
+    this.input = this.createInput("checkbox", this.initialValue);
 
-    this.svg = createSVG("svg", { width: this.length, height: this.length });
+    this.svg = this.createSVG("svg", {
+      width: this.length,
+      height: this.length
+    });
     this.svg.addEventListener("click", () => {
       this.toggleButtonState();
     });
 
-    this.buttonBackground = createSVG("rect", {
+    this.buttonBackground = this.createSVG("rect", {
       width: this.length,
       height: this.length
     });
 
-    this.buttonValue = createSVG(
+    this.buttonValue = this.createSVG(
       "rect",
       {
         width: this.length * this.inset,
@@ -277,33 +311,3 @@ class Button extends Control {
 }
 
 export { Fader, Knob, Button };
-
-function createInput(type, initialValue, min, max) {
-  const input = document.createElement("input");
-  input.type = type;
-  input.value = initialValue;
-  input.classList.add("hide-input");
-  if (type === "range") {
-    input.min = min;
-    input.max = max;
-  }
-  return input;
-}
-
-function createLabel(type, name, index) {
-  const label = document.createElement("label");
-  label.textContent = `${type}_${name}_${index}`;
-  return label;
-}
-
-function createSVG(svgElement, paramsObj, className) {
-  const svg = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    svgElement
-  );
-  Object.keys(paramsObj).forEach(param => {
-    svg.setAttribute(param, paramsObj[param]);
-  });
-  if (className) svg.classList.add(className);
-  return svg;
-}
