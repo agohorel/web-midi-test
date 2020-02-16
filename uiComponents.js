@@ -58,6 +58,18 @@ class Control {
   map = (value, inMin, inMax, outMin, outMax) => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   };
+
+  // @desc  : prevents "sticky" mouse behavior if cursor goes outside event listener
+  // @params: (event, [width, height])
+  // @notes : for 1:1 aspect ratio shapes just reuse the single dimension
+  boundsCheck = (e, dimensions) => {
+    if (e.offsetX > dimensions[0] - 2 || e.offsetX < 2) {
+      this.isDraggable = false;
+    }
+    if (e.offsetY > dimensions[1] - 2 || e.offsetY < 2) {
+      this.isDraggable = false;
+    }
+  };
 }
 
 class Fader extends Control {
@@ -98,6 +110,7 @@ class Fader extends Control {
       if (this.isDraggable) {
         this.value = this.map(e.offsetY, 0, this.height - 1, this.height, 0);
         this.faderValue.setAttribute("height", `${this.value}`);
+        this.boundsCheck(e, [this.width, this.height]);
       }
     });
 
@@ -179,6 +192,7 @@ class Knob extends Control {
           2 * Math.PI * (this.diameter / 2 - 5)
         );
         this.knobValue.setAttribute("stroke-dasharray", `${this.value}, 99999`);
+        this.boundsCheck(e, [this.diameter, this.diameter]);
       }
     });
 
