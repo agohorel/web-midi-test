@@ -16,7 +16,7 @@ class Control {
   createComponent = () => {
     const component = document.createElement("div");
     component.id = `${this.type}_${this.name}_${this.index}`;
-    component.classList.add(this.type);
+    component.classList.add(this.type, "mapping-target");
     return component;
   };
 

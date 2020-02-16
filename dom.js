@@ -52,4 +52,33 @@ removeButtonBtn.addEventListener("click", () => {
   buttons.pop();
 });
 
+const midiMapBtn = document.querySelector(".mapMode-button");
+let isMapModeActive = false;
+
+midiMapBtn.addEventListener("click", () => {
+  isMapModeActive = !isMapModeActive;
+  const mappingTargets = document.querySelectorAll(".mapping-target");
+
+  mappingTargets.forEach(target => {
+    if (isMapModeActive) {
+      target.classList.add("mapping-mode-active");
+    } else {
+      target.classList.remove("mapping-mode-active", "mapping-mode-selected");
+    }
+
+    target.addEventListener("click", () => {
+      const clickedTarget = target;
+      target.classList.toggle("mapping-mode-active");
+      target.classList.toggle("mapping-mode-selected");
+
+      mappingTargets.forEach(target => {
+        if (target !== clickedTarget) {
+          target.classList.remove("mapping-mode-selected");
+          target.classList.add("mapping-mode-active");
+        }
+      });
+    });
+  });
+});
+
 export { faders, knobs, buttons };

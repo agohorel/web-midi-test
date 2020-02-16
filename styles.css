@@ -49,6 +49,7 @@ label {
   border: none;
   background-color: var(--aleph-darkgrey);
   padding: 10px 15px;
+  color: var(--aleph-lightgrey);
 }
 
 .btn:hover {
@@ -117,4 +118,22 @@ label {
   fill: var(--aleph-blue);
   transform-origin: center;
   transform: translate(var(--button-inset), var(--button-inset));
+}
+
+.mapping-mode-active {
+  opacity: 0.5;
+}
+
+.mapping-mode-active svg,
+.mapping-mode-active circle,
+.mapping-mode-active rect {
+  fill: var(--aleph-blue);
+  stroke: var(--aleph-blue);
+}
+
+.mapping-mode-selected svg,
+.mapping-mode-selected circle,
+.mapping-mode-selected rect {
+  fill: var(--aleph-green);
+  stroke: var(--aleph-green);
 }
