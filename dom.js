@@ -53,26 +53,30 @@ removeButtonBtn.addEventListener("click", () => {
 });
 
 const midiMapBtn = document.querySelector(".mapMode-button");
-let isMapModeActive = false;
+let mapModeActive = false;
+let selectedControl = null;
+const setMapModeActive = value => (mapModeActive = value);
+const setSelectedControl = value => (selectedControl = value);
 
 midiMapBtn.addEventListener("click", () => {
-  isMapModeActive = !isMapModeActive;
+  mapModeActive = !mapModeActive;
   const mappingTargets = document.querySelectorAll(".mapping-target");
 
   mappingTargets.forEach(target => {
-    if (isMapModeActive) {
+    if (mapModeActive) {
       target.classList.add("mapping-mode-active");
     } else {
+      selectedControl = null;
       target.classList.remove("mapping-mode-active", "mapping-mode-selected");
     }
 
     target.addEventListener("click", () => {
-      const clickedTarget = target;
+      selectedControl = target;
       target.classList.toggle("mapping-mode-active");
       target.classList.toggle("mapping-mode-selected");
 
       mappingTargets.forEach(target => {
-        if (target !== clickedTarget) {
+        if (target !== selectedControl) {
           target.classList.remove("mapping-mode-selected");
           target.classList.add("mapping-mode-active");
         }
@@ -81,4 +85,12 @@ midiMapBtn.addEventListener("click", () => {
   });
 });
 
-export { faders, knobs, buttons };
+export {
+  faders,
+  knobs,
+  buttons,
+  mapModeActive,
+  setMapModeActive,
+  selectedControl,
+  setSelectedControl
+};

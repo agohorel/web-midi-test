@@ -1,8 +1,18 @@
 import { definitions } from "./midiDefinitions.js";
-import { faders, knobs, buttons } from "./dom.js";
+import {
+  faders,
+  knobs,
+  buttons,
+  mapModeActive,
+  setMapModeActive,
+  selectedControl,
+  setSelectedControl
+} from "./dom.js";
 
 const potDisplay = document.querySelector(".pot-val");
 const btnDisplay = document.querySelector(".btn-val");
+
+let midiMappings = [];
 
 init();
 
@@ -42,6 +52,20 @@ function onMIDIMessage(event) {
 
   console.log(controllerName, channel, note, velocity);
   console.log(cmd, type);
+
+  if (selectedControl && mapModeActive) {
+    const midiEntry = {
+      note,
+      name: selectedControl.id,
+      value: velocity,
+      deviceName: controllerName
+    };
+
+    midiMappings.push(midiEntry);
+    setSelectedControl(null);
+    setMapModeActive(false);
+    console.log(midiMappings);
+  }
 
   switch (type) {
     case definitions.noteOn:
