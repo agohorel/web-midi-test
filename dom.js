@@ -83,7 +83,7 @@ midiMapBtn.addEventListener("click", () => {
 function updateMappingTargets() {
   mappingTargets = document.querySelectorAll(".mapping-target");
 
-  mappingTargets.forEach(target => {
+  mappingTargets.forEach((target, i) => {
     if (mapModeActive) {
       target.classList.add("mapping-mode-active");
     } else {
@@ -91,25 +91,29 @@ function updateMappingTargets() {
       target.classList.remove("mapping-mode-active", "mapping-mode-selected");
     }
 
-    target.addEventListener("click", () => {
-      if (mapModeActive) {
-        selectedControl = target;
+    if (i === mappingTargets.length - 1) {
+      target.addEventListener("click", () => {
+        if (mapModeActive) {
+          selectedControl = target;
 
-        target.classList.add("mapping-mode-selected");
-        target.classList.remove("mapping-mode-active");
+          target.classList.add("mapping-mode-selected");
+          target.classList.remove("mapping-mode-active");
 
-        mappingTargets.forEach(target => {
-          if (target !== selectedControl) {
-            target.classList.remove("mapping-mode-selected");
-            target.classList.add("mapping-mode-active");
-          }
-        });
-      }
-    });
+          mappingTargets.forEach(target => {
+            if (target !== selectedControl) {
+              target.classList.remove("mapping-mode-selected");
+              target.classList.add("mapping-mode-active");
+            }
+          });
+        }
+      });
+    }
 
-    target.addEventListener("midiMappingCreated", () => {
-      target.classList.remove("mapping-mode-active", "mapping-mode-selected");
-    });
+    if (i === mappingTargets.length - 1) {
+      target.addEventListener("midiMappingCreated", () => {
+        target.classList.remove("mapping-mode-active", "mapping-mode-selected");
+      });
+    }
   });
 }
 
