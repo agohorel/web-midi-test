@@ -6,7 +6,9 @@ import {
   mapModeActive,
   setMapModeActive,
   selectedControl,
-  setSelectedControl
+  setSelectedControl,
+  midiMappingCreated,
+  mappingTargets
 } from "./dom.js";
 
 const potDisplay = document.querySelector(".pot-val");
@@ -50,8 +52,8 @@ function onMIDIMessage(event) {
     velocity = data[2];
   const controllerName = event.target.name;
 
-  console.log(controllerName, channel, note, velocity);
-  console.log(cmd, type);
+  // console.log(controllerName, channel, note, velocity);
+  // console.log(cmd, type);
 
   if (selectedControl && mapModeActive) {
     const midiEntry = {
@@ -62,6 +64,7 @@ function onMIDIMessage(event) {
     };
 
     midiMappings.push(midiEntry);
+    mappingTargets.forEach(target => target.dispatchEvent(midiMappingCreated));
     setSelectedControl(null);
     setMapModeActive(false);
     console.log(midiMappings);

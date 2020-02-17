@@ -9,11 +9,13 @@ addFaderBtn.addEventListener("click", () => {
     new Fader({ parent: ".faders", name: "volume", index: faders.length + 1 })
   );
   faders[faders.length - 1].create();
+  updateMappingTargets();
 });
 
 removeFaderBtn.addEventListener("click", () => {
   faders[faders.length - 1].delete();
   faders.pop();
+  updateMappingTargets();
 });
 
 const addKnobBtn = document.querySelector(".add-knob");
@@ -25,11 +27,13 @@ addKnobBtn.addEventListener("click", () => {
     new Knob({ parent: ".knobs", name: "eq", index: knobs.length + 1 })
   );
   knobs[knobs.length - 1].create();
+  updateMappingTargets();
 });
 
 removeKnobBtn.addEventListener("click", () => {
   knobs[knobs.length - 1].delete();
   knobs.pop();
+  updateMappingTargets();
 });
 
 const addButtonBtn = document.querySelector(".add-button");
@@ -45,22 +49,39 @@ addButtonBtn.addEventListener("click", () => {
     })
   );
   buttons[buttons.length - 1].create();
+  updateMappingTargets();
 });
 
 removeButtonBtn.addEventListener("click", () => {
   buttons[buttons.length - 1].delete();
   buttons.pop();
+  updateMappingTargets();
 });
 
 const midiMapBtn = document.querySelector(".mapMode-button");
+let mappingTargets = [];
 let mapModeActive = false;
 let selectedControl = null;
 const setMapModeActive = value => (mapModeActive = value);
 const setSelectedControl = value => (selectedControl = value);
+const midiMappingCreated = new Event("midiMappingCreated");
 
 midiMapBtn.addEventListener("click", () => {
   mapModeActive = !mapModeActive;
-  const mappingTargets = document.querySelectorAll(".mapping-target");
+
+  mappingTargets.forEach(target => {
+    if (mapModeActive) {
+      target.classList.add("mapping-mode-active");
+    } else {
+      selectedControl = null;
+      target.classList.remove("mapping-mode-active", "mapping-mode-selected");
+    }
+  });
+});
+
+// @TODO - prevent duplicate eventlisteners!!!
+function updateMappingTargets() {
+  mappingTargets = document.querySelectorAll(".mapping-target");
 
   mappingTargets.forEach(target => {
     if (mapModeActive) {
@@ -71,19 +92,26 @@ midiMapBtn.addEventListener("click", () => {
     }
 
     target.addEventListener("click", () => {
-      selectedControl = target;
-      target.classList.toggle("mapping-mode-active");
-      target.classList.toggle("mapping-mode-selected");
+      if (mapModeActive) {
+        selectedControl = target;
 
-      mappingTargets.forEach(target => {
-        if (target !== selectedControl) {
-          target.classList.remove("mapping-mode-selected");
-          target.classList.add("mapping-mode-active");
-        }
-      });
+        target.classList.add("mapping-mode-selected");
+        target.classList.remove("mapping-mode-active");
+
+        mappingTargets.forEach(target => {
+          if (target !== selectedControl) {
+            target.classList.remove("mapping-mode-selected");
+            target.classList.add("mapping-mode-active");
+          }
+        });
+      }
+    });
+
+    target.addEventListener("midiMappingCreated", () => {
+      target.classList.remove("mapping-mode-active", "mapping-mode-selected");
     });
   });
-});
+}
 
 export {
   faders,
@@ -92,5 +120,7 @@ export {
   mapModeActive,
   setMapModeActive,
   selectedControl,
-  setSelectedControl
+  setSelectedControl,
+  midiMappingCreated,
+  mappingTargets
 };
