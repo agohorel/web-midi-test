@@ -74,12 +74,12 @@ function onMIDIMessage(event) {
     case definitions.noteOn:
     case definitions.noteOff:
       btnDisplay.textContent = `button value: ${velocity}`;
-      buttons.forEach(button => button.update(velocity));
+      linkMapToControl(midiMappings, buttons, note, velocity);
       break;
     case definitions.cc:
       potDisplay.textContent = `potentiometer value: ${velocity}`;
-      faders.forEach(fader => fader.update(velocity));
-      knobs.forEach(knob => knob.update(velocity));
+      linkMapToControl(midiMappings, faders, note, velocity);
+      linkMapToControl(midiMappings, knobs, note, velocity);
       break;
     default:
       null;
@@ -99,4 +99,16 @@ function onStateChange(event) {
 
 function onMIDIFailure(e) {
   console.log("no access to midi, something went wrong: ", e);
+}
+
+function linkMapToControl(mappingArray, controlArray, note, velocity) {
+  mappingArray.forEach(mapping => {
+    if (mapping.note === note) {
+      controlArray.forEach(c => {
+        if (`${c.type}_${c.name}_${c.index}` === mapping.name) {
+          c.update(velocity);
+        }
+      });
+    }
+  });
 }
