@@ -107,6 +107,7 @@ function linkMapToControl(mappingArray, controlArray, note, velocity) {
       controlArray.forEach(c => {
         if (`${c.type}_${c.name}_${c.index}` === mapping.name) {
           c.update(velocity);
+          mapping.value = velocity;
         }
       });
     }
