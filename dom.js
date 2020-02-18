@@ -1,64 +1,41 @@
 import { Fader, Knob, Button } from "./uiComponents.js";
 
-const addFaderBtn = document.querySelector(".add-btn");
-const removeFaderBtn = document.querySelector(".remove-btn");
-let faders = [];
+let faders = [],
+  knobs = [],
+  buttons = [];
 
-addFaderBtn.addEventListener("click", () => {
-  faders.push(
-    new Fader({ parent: ".faders", name: "volume", index: faders.length + 1 })
-  );
-  faders[faders.length - 1].create();
-  updateMappingTargets();
-});
+createAddRemoveControls(
+  document.querySelector(".add-btn"),
+  document.querySelector(".remove-btn"),
+  faders,
+  { parent: ".faders", name: "volume", index: faders.length + 1 },
+  Fader
+);
 
-removeFaderBtn.addEventListener("click", () => {
-  faders[faders.length - 1].delete();
-  faders.pop();
-  updateMappingTargets();
-});
+createAddRemoveControls(
+  document.querySelector(".add-knob"),
+  document.querySelector(".remove-knob"),
+  knobs,
+  {
+    parent: ".knobs",
+    name: "eq",
+    index: knobs.length + 1
+  },
+  Knob
+);
 
-const addKnobBtn = document.querySelector(".add-knob");
-const removeKnobBtn = document.querySelector(".remove-knob");
-let knobs = [];
+createAddRemoveControls(
+  document.querySelector(".add-button"),
+  document.querySelector(".remove-button"),
+  buttons,
+  {
+    parent: ".buttons",
+    name: "button",
+    index: buttons.length + 1
+  },
+  Button
+);
 
-addKnobBtn.addEventListener("click", () => {
-  knobs.push(
-    new Knob({ parent: ".knobs", name: "eq", index: knobs.length + 1 })
-  );
-  knobs[knobs.length - 1].create();
-  updateMappingTargets();
-});
-
-removeKnobBtn.addEventListener("click", () => {
-  knobs[knobs.length - 1].delete();
-  knobs.pop();
-  updateMappingTargets();
-});
-
-const addButtonBtn = document.querySelector(".add-button");
-const removeButtonBtn = document.querySelector(".remove-button");
-let buttons = [];
-
-addButtonBtn.addEventListener("click", () => {
-  buttons.push(
-    new Button({
-      parent: ".buttons",
-      name: "button",
-      index: buttons.length + 1
-    })
-  );
-  buttons[buttons.length - 1].create();
-  updateMappingTargets();
-});
-
-removeButtonBtn.addEventListener("click", () => {
-  buttons[buttons.length - 1].delete();
-  buttons.pop();
-  updateMappingTargets();
-});
-
-const midiMapBtn = document.querySelector(".mapMode-button");
 let mappingTargets = [];
 let mapModeActive = false;
 let selectedControl = null;
@@ -66,7 +43,7 @@ const setMapModeActive = value => (mapModeActive = value);
 const setSelectedControl = value => (selectedControl = value);
 const midiMappingCreated = new Event("midiMappingCreated");
 
-midiMapBtn.addEventListener("click", () => {
+document.querySelector(".mapMode-button").addEventListener("click", () => {
   mapModeActive = !mapModeActive;
 
   mappingTargets.forEach(target => {
@@ -79,7 +56,6 @@ midiMapBtn.addEventListener("click", () => {
   });
 });
 
-// @TODO - prevent duplicate eventlisteners!!!
 function updateMappingTargets() {
   mappingTargets = document.querySelectorAll(".mapping-target");
 
@@ -114,6 +90,26 @@ function updateMappingTargets() {
         target.classList.remove("mapping-mode-active", "mapping-mode-selected");
       });
     }
+  });
+}
+
+function createAddRemoveControls(
+  addBtn,
+  removeBtn,
+  controlsArray,
+  controlParams,
+  ControlClass
+) {
+  addBtn.addEventListener("click", () => {
+    controlsArray.push(new ControlClass(controlParams));
+    controlsArray[controlsArray.length - 1].create();
+    updateMappingTargets();
+  });
+
+  removeBtn.addEventListener("click", () => {
+    controlsArray[controlsArray.length - 1].delete();
+    controlsArray.pop();
+    updateMappingTargets();
   });
 }
 
