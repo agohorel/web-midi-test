@@ -70,6 +70,15 @@ class Control {
       this.isDraggable = false;
     }
   };
+
+  addMouseEventListeners = element => {
+    element.addEventListener("mousedown", () => {
+      this.isDraggable = true;
+    });
+    element.addEventListener("mouseup", () => {
+      this.isDraggable = false;
+    });
+  };
 }
 
 class Fader extends Control {
@@ -100,12 +109,8 @@ class Fader extends Control {
       "faderSVG"
     );
 
-    this.svg.addEventListener("mousedown", () => {
-      this.isDraggable = true;
-    });
-    this.svg.addEventListener("mouseup", () => {
-      this.isDraggable = false;
-    });
+    this.addMouseEventListeners(this.svg);
+
     this.svg.addEventListener("mousemove", e => {
       if (this.isDraggable) {
         this.value = this.map(e.offsetY, 0, this.height - 1, this.height, 0);
@@ -176,12 +181,9 @@ class Knob extends Control {
       width: this.diameter,
       height: this.diameter
     });
-    this.svg.addEventListener("mousedown", () => {
-      this.isDraggable = true;
-    });
-    this.svg.addEventListener("mouseup", () => {
-      this.isDraggable = false;
-    });
+
+    this.addMouseEventListeners(this.svg);
+
     this.svg.addEventListener("mousemove", e => {
       if (this.isDraggable) {
         this.value = this.map(
@@ -270,6 +272,7 @@ class Button extends Control {
       width: this.length,
       height: this.length
     });
+
     this.svg.addEventListener("click", () => {
       this.toggleButtonState();
     });
