@@ -8,7 +8,7 @@ createAddRemoveControls(
   document.querySelector(".add-btn"),
   document.querySelector(".remove-btn"),
   faders,
-  { parent: ".faders", name: "volume", index: faders.length + 1 },
+  { parent: ".faders", name: "volume" },
   Fader
 );
 
@@ -18,8 +18,7 @@ createAddRemoveControls(
   knobs,
   {
     parent: ".knobs",
-    name: "eq",
-    index: knobs.length + 1
+    name: "eq"
   },
   Knob
 );
@@ -30,8 +29,7 @@ createAddRemoveControls(
   buttons,
   {
     parent: ".buttons",
-    name: "button",
-    index: buttons.length + 1
+    name: "button"
   },
   Button
 );
@@ -101,7 +99,9 @@ function createAddRemoveControls(
   ControlClass
 ) {
   addBtn.addEventListener("click", () => {
-    controlsArray.push(new ControlClass(controlParams));
+    controlsArray.push(
+      new ControlClass({ ...controlParams, index: controlsArray.length + 1 })
+    );
     controlsArray[controlsArray.length - 1].create();
     updateMappingTargets();
   });
